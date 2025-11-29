@@ -5,4 +5,5 @@ import manifest from './manifest.json' with { type: 'json' };
 
 export default defineConfig({
   plugins: [react(), crx({ manifest })],
+  base: './',
 });
