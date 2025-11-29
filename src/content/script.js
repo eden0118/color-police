@@ -2,6 +2,7 @@ import { extractColorsFromPage, getColoredElements, normalizeColor } from '../ut
 
 // Track highlighted elements for cleanup
 let highlightedElements = new Set()
+let currentHighlightedColor = null // Track the currently highlighted color
 
 // Listen for messages from popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -11,6 +12,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     handleHighlightColor(request.color)
   } else if (request.action === 'clearHighlights') {
     clearHighlights()
+  } else if (request.action === 'getHighlightedColor') {
+    sendResponse({ color: currentHighlightedColor })
   }
 })
 
@@ -28,16 +31,25 @@ function handleScanColors(sendResponse) {
 }
 
 /**
- * Highlights all elements with a specific color
+ * Highlights all elements with a specific color (toggle behavior)
  */
 function handleHighlightColor(color) {
+  // If the same color is clicked again, toggle it off
+  if (currentHighlightedColor === color) {
+    clearHighlights()
+    return
+  }
+
+  // Clear previous highlights before showing new ones
   clearHighlights()
+  currentHighlightedColor = color
 
   const elements = document.querySelectorAll('*')
-  let count = 0
+  const elementsToHighlight = []
 
+  // First pass: collect all matching elements
   elements.forEach((element) => {
-    if (element.tagName === 'SCRIPT' || element.tagName === 'STYLE') {
+    if (element.tagName === 'SCRIPT' || element.tagName === 'STYLE' || element.tagName === 'META' || element.tagName === 'LINK') {
       return
     }
 
@@ -47,18 +59,36 @@ function handleHighlightColor(color) {
     const borderColor = normalizeColor(computedStyle.borderColor)
 
     if (bgColor === color || textColor === color || borderColor === color) {
-      const overlay = document.createElement('div')
-      overlay.className = 'color-thief-police-highlight'
-      overlay.dataset.targetColor = color
-
-      // Store original background and add highlight
-      element.style.position = 'relative'
-      element.classList.add('color-thief-police-highlighted')
-      element.appendChild(overlay)
-
-      highlightedElements.add(element)
-      count++
+      elementsToHighlight.push(element)
     }
+  })
+
+  // Second pass: filter out elements that are inside other highlighted elements
+  const filteredElements = elementsToHighlight.filter((element) => {
+    return !elementsToHighlight.some((otherElement) => {
+      return otherElement !== element && otherElement.contains(element)
+    })
+  })
+
+  // Third pass: add highlights only to filtered elements
+  let count = 0
+  filteredElements.forEach((element) => {
+    const overlay = document.createElement('div')
+    overlay.className = 'color-thief-police-highlight'
+    overlay.dataset.targetColor = color
+
+    // Only set position:relative if not already positioned
+    const currentPosition = window.getComputedStyle(element).position
+    if (currentPosition === 'static') {
+      element.style.position = 'relative'
+      element.dataset.ctpPositionSet = 'true'
+    }
+
+    element.classList.add('color-thief-police-highlighted')
+    element.appendChild(overlay)
+
+    highlightedElements.add(element)
+    count++
   })
 
   // Inject highlight styles if not already present
@@ -77,8 +107,14 @@ function clearHighlights() {
     if (overlay) {
       overlay.remove()
     }
+    // Clean up style only if we added it
+    if (element.dataset.ctpPositionSet === 'true') {
+      element.style.position = ''
+      delete element.dataset.ctpPositionSet
+    }
   })
   highlightedElements.clear()
+  currentHighlightedColor = null
 }
 
 /**
@@ -103,11 +139,11 @@ function injectHighlightStyles() {
       pointer-events: none;
       animation: color-thief-police-pulse 1.5s ease-in-out infinite;
       border-radius: inherit;
-      z-index: 999999;
+      z-index: 10000;
     }
 
     .color-thief-police-highlighted {
-      z-index: 999998;
+      z-index: auto;
     }
 
     @keyframes color-thief-police-pulse {
