@@ -7,7 +7,7 @@ export function Popup() {
   const [colors, setColors] = useState([]);
   const [clusters, setClusters] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [threshold, setThreshold] = useState(30);
+  const [threshold, setThreshold] = useState(20); // delta-E value
   const [activeTab, setActiveTab] = useState('clusters');
   const [highlightedColor, setHighlightedColor] = useState(null);
   const [language, setLanguageState] = useState('en');

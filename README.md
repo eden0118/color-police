@@ -160,8 +160,7 @@ color-police/
 │   └── utils/
 │       ├── colorExtractor.js    # DOM color detection
 │       ├── colorClustering.js   # Delta-E algorithm
-│       ├── colorContrast.js     # Contrast text color calculation
-│       └── colorUtils.js        # Helper utilities
+│       └── colorContrast.js     # Contrast text color calculation
 ├── public/
 │   └── icons/                   # Extension icons (SVG)
 │       ├── icon-16.svg
@@ -453,12 +452,6 @@ Output in `dist/` folder ready to upload to Chrome Web Store.
 - `getContrastTextColor()` - Calculates optimal text color for background
 - Returns white or black for maximum readability
 - Used for color label text in UI
-
-**colorUtils.js**
-- `hexToRgb()` - Converts hex to RGB
-- `rgbToHex()` - Converts RGB to hex
-- `isValidColor()` - Validates color format
-- Helper functions for color manipulation
 
 #### Internationalization (`src/i18n/translations.js`)
 - Supports English and Chinese (Traditional)
@@ -970,12 +963,6 @@ Uses Chrome Extension Manifest v3 (modern standard).
 3. Go to website
 4. Click extension icon
 5. Click "Scan Page"
-
-**Add a new color utility:**
-1. Edit `src/utils/colorUtils.js`
-2. Export the function
-3. Import where needed
-4. Rebuild: `npm run build`
 
 **Support a new language:**
 1. Edit `src/i18n/translations.js`
