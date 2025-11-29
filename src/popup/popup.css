@@ -1,458 +1,277 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Global Reset */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  @apply m-0 box-border p-0;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  border: none;
-  background: transparent;
+html,
+body {
+  @apply m-0 border-none bg-transparent p-0;
 }
 
 #root {
-  margin: 0;
-  padding: 0;
-  border: none;
+  @apply m-0 border-none p-0;
 }
 
 /* Popup Container */
 .popup-container {
-  width: 480px;
-  max-height: 800px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background: rgba(248, 249, 250, 0.95);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition: background-color 0.3s, color 0.3s;
+  @apply relative flex h-screen max-h-96 w-96 flex-col overflow-hidden rounded-xl border-none bg-gradient-to-br from-slate-50 to-slate-100 font-system shadow-2xl transition-all duration-300;
   backdrop-filter: blur(8px);
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  border: none;
   margin: 0;
   padding: 0;
 }
 
 .popup-container.dark-mode {
-  background: rgba(30, 30, 30, 0.95);
-  color: #e0e0e0;
+  @apply bg-gradient-to-br from-slate-800 to-slate-900 text-slate-300;
 }
 
 .popup-container.dark-mode .controls {
-  background: #2d2d2d;
-  border-bottom-color: #404040;
+  @apply border-slate-700 bg-slate-800;
 }
 
 .popup-container.dark-mode .popup-header {
-  border-bottom-color: #667eea;
+  @apply border-primary;
 }
 
 .popup-container.dark-mode .tabs {
-  background: #2d2d2d;
-  border-bottom-color: #404040;
+  @apply border-slate-700 bg-slate-800;
 }
 
 .popup-container.dark-mode .tab {
-  color: #999;
+  @apply text-slate-400;
 }
 
 .popup-container.dark-mode .tab:hover {
-  color: #667eea;
+  @apply text-primary;
 }
 
 .popup-container.dark-mode .tab.active {
-  color: #667eea;
-  border-bottom-color: #667eea;
+  @apply border-primary text-primary;
 }
 
 .popup-container.dark-mode .content {
-  background: #1e1e1e;
+  @apply bg-slate-900;
 }
 
 .popup-container.dark-mode .cluster-item {
-  background: #2d2d2d;
-  border-color: transparent;
+  @apply border-transparent bg-slate-800;
 }
 
 .popup-container.dark-mode .cluster-info {
-  color: #e0e0e0;
+  @apply text-slate-300;
 }
 
 .popup-container.dark-mode .cluster-title {
-  color: #e0e0e0;
+  @apply text-slate-300;
 }
 
 .popup-container.dark-mode .cluster-count {
-  color: #999;
+  @apply text-slate-500;
 }
 
 .popup-container.dark-mode .color-item {
-  background: transparent;
-  border-color: transparent;
+  @apply border-transparent bg-transparent;
 }
 
 .popup-container.dark-mode .color-code {
-  color: #ccc;
+  @apply text-slate-300;
 }
 
 /* Header */
 .popup-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 16px;
-  border-bottom: 2px solid #764ba2;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: background 0.3s;
+  @apply flex flex-col gap-2 border-b-2 border-secondary bg-gradient-to-r from-primary to-secondary px-4 py-4 text-white shadow-md transition-all duration-300;
 }
 
 .header-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
+  @apply flex items-center justify-between gap-3;
 }
 
 .header-controls {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+  @apply flex items-center gap-2;
 }
 
 .theme-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: all 0.2s;
-}
-
-.theme-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.5);
+  @apply cursor-pointer rounded-md border border-white/30 bg-white/20 px-2 py-1.5 text-base text-white transition-all duration-200 hover:border-white/50 hover:bg-white/30;
 }
 
 .language-select {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 12px;
-  transition: all 0.2s;
-}
-
-.language-select:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.5);
+  @apply cursor-pointer rounded-md border border-white/30 bg-white/20 px-2 py-1.5 text-xs text-white transition-all duration-200 hover:border-white/50 hover:bg-white/30;
 }
 
 .language-select option {
-  background: #2d2d2d;
-  color: white;
+  @apply bg-slate-800 text-white;
 }
 
 .popup-header h1 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  @apply m-0 text-lg font-bold tracking-wider;
 }
 
 .popup-header .subtitle {
-  margin: 4px 0 0 0;
-  font-size: 12px;
-  opacity: 0.9;
+  @apply m-0 text-xs opacity-90;
+  margin-top: 4px;
 }
 
 /* Controls */
 .controls {
-  padding: 12px 16px;
-  background: white;
-  border-bottom: 1px solid #e0e0e0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  flex-shrink: 0;
+  @apply flex flex-shrink-0 flex-col gap-3 border-b border-slate-200 bg-white px-4 py-3;
 }
 
 .scan-btn {
-  padding: 8px 16px;
-  background: #667eea;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
+  @apply cursor-pointer rounded-md bg-primary px-4 py-2 font-semibold text-white transition-colors duration-200 hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-60;
   font-size: 14px;
 }
 
-.scan-btn:hover:not(:disabled) {
-  background: #5568d3;
-}
-
-.scan-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
 .threshold-control {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: #333;
+  @apply flex items-center gap-2 text-sm text-slate-800;
 }
 
 .popup-container.dark-mode .threshold-control {
-  color: #aaa;
+  @apply text-slate-400;
 }
 
 .threshold-control label {
-  font-weight: 500;
-  color: #333;
-  min-width: 120px;
+  @apply min-w-fit font-medium text-slate-800;
 }
 
 .popup-container.dark-mode .threshold-control label {
-  color: #aaa;
+  @apply text-slate-400;
 }
 
 .threshold-value {
-  min-width: 30px;
-  text-align: right;
-  font-weight: 600;
-  color: #667eea;
+  @apply min-w-7 text-right font-semibold text-primary;
 }
 
 .delta-e-info {
-  font-size: 11px;
-  color: #666;
+  @apply border-t border-slate-200 py-2 text-xs leading-relaxed text-slate-600;
   margin: 0;
-  line-height: 1.4;
   padding: 8px 0;
-  border-top: 1px solid #e0e0e0;
 }
 
 .popup-container.dark-mode .delta-e-info {
-  color: #aaa;
-  border-top-color: #404040;
+  @apply border-slate-700 text-slate-400;
 }
 
 .threshold-control input {
-  flex: 1;
-  height: 4px;
-  cursor: pointer;
-}
-
-.threshold-value {
-  min-width: 30px;
-  text-align: right;
-  font-weight: 600;
-  color: #667eea;
+  @apply h-1 flex-1 cursor-pointer;
 }
 
 /* Tabs */
 .tabs {
-  display: flex;
-  background: white;
-  border-bottom: 1px solid #e0e0e0;
-  padding: 0 16px;
-  gap: 16px;
-  flex-shrink: 0;
+  @apply flex flex-shrink-0 gap-4 border-b border-slate-200 bg-white px-4;
 }
 
 .tab {
-  padding: 12px 0;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  color: #999;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
+  @apply cursor-pointer border-b-2 border-transparent bg-none px-0 py-3 font-medium text-slate-500 transition-all duration-200 hover:text-primary;
   font-size: 13px;
 }
 
-.tab:hover {
-  color: #667eea;
-}
-
 .tab.active {
-  color: #667eea;
-  border-bottom-color: #667eea;
+  @apply border-primary text-primary;
 }
 
 /* Content Area */
 .content {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 12px 16px;
+  @apply flex-1 overflow-y-auto overflow-x-hidden px-4 py-3;
   scrollbar-width: thin;
   scrollbar-color: #ddd #f8f9fa;
   min-height: 0;
 }
 
 .empty-state {
-  text-align: center;
-  color: #999;
-  padding: 32px 16px;
-  font-size: 13px;
+  @apply px-4 py-8 text-center text-sm text-slate-500;
 }
 
 /* Clusters View */
 .clusters-view {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  @apply flex flex-col gap-3;
 }
 
 .cluster-item {
-  background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  @apply rounded-lg border border-slate-200 bg-white px-3 py-3 shadow-sm;
 }
 
 .cluster-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-  cursor: pointer;
+  @apply mb-3 flex cursor-pointer items-center gap-3;
 }
 
 .color-preview {
+  @apply flex-shrink-0 rounded-md border border-slate-200 shadow-sm;
   width: 40px;
   height: 40px;
-  border-radius: 6px;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  flex-shrink: 0;
 }
 
 .cluster-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  @apply flex flex-col gap-0.5;
 }
 
 .cluster-title {
-  font-weight: 600;
-  color: #333;
-  font-size: 13px;
-  font-family: 'Courier New', monospace;
+  @apply font-mono text-sm font-semibold text-slate-900;
 }
 
 .cluster-count {
-  font-size: 11px;
-  color: #999;
+  @apply text-xs text-slate-500;
 }
 
 .cluster-colors {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  @apply flex flex-wrap gap-2;
 }
 
 .color-chip {
-  flex: 1;
+  @apply relative flex-1 cursor-pointer overflow-hidden rounded border border-slate-200 bg-slate-100 px-2 py-1.5 font-mono text-xs transition-all duration-200 hover:border-primary hover:shadow-md;
   min-width: 80px;
-  padding: 6px 8px;
-  background: #f5f5f5;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 11px;
-  font-family: 'Courier New', monospace;
-  position: relative;
-  overflow: hidden;
 }
 
 .color-chip:hover {
-  border-color: #667eea;
   box-shadow: 0 2px 6px rgba(102, 126, 234, 0.2);
 }
 
 .color-chip.active {
-  border: 3px solid #667eea;
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.3), inset 0 0 0 1px #667eea, 0 4px 12px rgba(102, 126, 234, 0.3);
-  transform: scale(1.02);
-  background: #f9fafb;
+  @apply scale-105 border-4 border-primary bg-slate-50;
+  box-shadow:
+    0 0 0 2px rgba(102, 126, 234, 0.3),
+    inset 0 0 0 1px #667eea,
+    0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .color-label {
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 600;
-  font-size: 11px;
-  font-family: 'Courier New', monospace;
+  @apply overflow-hidden text-ellipsis whitespace-nowrap font-mono text-xs font-semibold;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Colors View */
 .color-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 12px;
+  @apply grid gap-3;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  padding: 12px;
 }
 
 .color-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.color-item:hover {
-  transform: translateY(-2px);
+  @apply flex cursor-pointer flex-col items-center gap-2 transition-transform duration-200 hover:translate-y-[-2px];
 }
 
 .color-square {
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
-  border: 2px solid #e0e0e0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s;
+  @apply h-20 w-20 rounded-lg border-2 border-slate-200 shadow-md transition-all duration-200;
 }
 
 .color-item:hover .color-square {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border-color: #667eea;
+  @apply border-primary shadow-lg;
 }
 
 .color-item.active .color-square {
-  border: 4px solid #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.4), inset 0 0 0 2px #667eea, 0 6px 16px rgba(102, 126, 234, 0.4);
-  transform: scale(1.05);
-}
+  @apply scale-105 border-4 border-primary;
+  box-shadow:
+    0 0 0 3px rgba(102, 126, 234, 0.4),
+    inset 0 0 0 2px #667eea,
+    0 6px 16px rgba(102, 126, 234, 0.4);
 }
 
 .color-code {
-  font-size: 11px;
-  font-weight: 600;
-  font-family: 'Courier New', monospace;
+  @apply max-w-min rounded border border-slate-200 bg-slate-50 px-1.5 py-1 font-mono text-xs font-semibold text-slate-900 transition-all duration-200;
   word-break: break-all;
   text-align: center;
-  max-width: 100px;
-  padding: 4px 6px;
-  border-radius: 4px;
-  transition: all 0.2s;
 }
 
 /* Scrollbar */
@@ -461,14 +280,9 @@ html, body {
 }
 
 .content::-webkit-scrollbar-track {
-  background: transparent;
+  @apply bg-transparent;
 }
 
 .content::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 3px;
-}
-
-.content::-webkit-scrollbar-thumb:hover {
-  background: #999;
+  @apply rounded bg-slate-300 hover:bg-slate-500;
 }

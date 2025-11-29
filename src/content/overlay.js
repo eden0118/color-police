@@ -2,9 +2,9 @@
  * Creates a draggable floating panel overlay on the webpage
  */
 
-let overlayPanel = null
-let isDragging = false
-let dragOffset = { x: 0, y: 0 }
+let overlayPanel = null;
+let isDragging = false;
+let dragOffset = { x: 0, y: 0 };
 
 /**
  * Creates and injects the floating panel into the page
@@ -12,30 +12,31 @@ let dragOffset = { x: 0, y: 0 }
 export function createFloatingPanel(colors, clusters) {
   // Remove existing panel if any
   if (overlayPanel) {
-    overlayPanel.remove()
+    overlayPanel.remove();
   }
 
   // Create panel container
-  const panel = document.createElement('div')
-  panel.id = 'color-thief-police-panel'
-  panel.className = 'ctp-floating-panel'
+  const panel = document.createElement('div');
+  panel.id = 'color-thief-police-panel';
+  panel.className = 'ctp-floating-panel';
 
   // Create header
-  const header = document.createElement('div')
-  header.className = 'ctp-panel-header'
+  const header = document.createElement('div');
+  header.className = 'ctp-panel-header';
   header.innerHTML = `
     <h3>Color Thief Police</h3>
     <button class="ctp-close-btn">✕</button>
-  `
+  `;
 
   // Create content
-  const content = document.createElement('div')
-  content.className = 'ctp-panel-content'
+  const content = document.createElement('div');
+  content.className = 'ctp-panel-content';
 
   // Add clusters
-  const clustersHtml = clusters.map((cluster, idx) => {
-    const mainColor = cluster[0]
-    return `
+  const clustersHtml = clusters
+    .map((cluster, idx) => {
+      const mainColor = cluster[0];
+      return `
       <div class="ctp-cluster" data-color="${mainColor}">
         <div class="ctp-color-preview" style="background-color: ${mainColor}"></div>
         <div class="ctp-cluster-info">
@@ -43,86 +44,87 @@ export function createFloatingPanel(colors, clusters) {
           <div class="ctp-cluster-count">${cluster.length} colors</div>
         </div>
       </div>
-    `
-  }).join('')
+    `;
+    })
+    .join('');
 
-  content.innerHTML = clustersHtml
+  content.innerHTML = clustersHtml;
 
   // Assemble panel
-  panel.appendChild(header)
-  panel.appendChild(content)
+  panel.appendChild(header);
+  panel.appendChild(content);
 
   // Inject styles
-  injectPanelStyles()
+  injectPanelStyles();
 
   // Add to page
-  document.body.appendChild(panel)
-  overlayPanel = panel
+  document.body.appendChild(panel);
+  overlayPanel = panel;
 
   // Add event listeners
-  header.addEventListener('mousedown', handleHeaderMouseDown)
+  header.addEventListener('mousedown', handleHeaderMouseDown);
 
   // Close button
-  const closeBtn = panel.querySelector('.ctp-close-btn')
+  const closeBtn = panel.querySelector('.ctp-close-btn');
   closeBtn.addEventListener('click', () => {
     if (overlayPanel) {
-      overlayPanel.remove()
-      overlayPanel = null
+      overlayPanel.remove();
+      overlayPanel = null;
     }
-  })
+  });
 
   // Color click handlers
-  panel.querySelectorAll('.ctp-cluster').forEach(cluster => {
+  panel.querySelectorAll('.ctp-cluster').forEach((cluster) => {
     cluster.addEventListener('click', () => {
-      const color = cluster.dataset.color
+      const color = cluster.dataset.color;
       // Send message to highlight
       chrome.runtime.sendMessage({
         action: 'highlightColorFromOverlay',
-        color: color
-      })
-    })
-  })
+        color: color,
+      });
+    });
+  });
 }
 
 /**
  * Handles mouse down on header for dragging
  */
 function handleHeaderMouseDown(e) {
-  if (e.target.closest('.ctp-close-btn')) return
+  if (e.target.closest('.ctp-close-btn')) return;
 
-  isDragging = true
-  const rect = overlayPanel.getBoundingClientRect()
-  dragOffset.x = e.clientX - rect.left
-  dragOffset.y = e.clientY - rect.top
+  isDragging = true;
+  const rect = overlayPanel.getBoundingClientRect();
+  dragOffset.x = e.clientX - rect.left;
+  dragOffset.y = e.clientY - rect.top;
 
-  overlayPanel.style.cursor = 'grabbing'
+  overlayPanel.style.cursor = 'grabbing';
 
-  document.addEventListener('mousemove', handleMouseMove)
-  document.addEventListener('mouseup', handleMouseUp)
+  document.addEventListener('mousemove', handleMouseMove);
+  document.addEventListener('mouseup', handleMouseUp);
 
-  e.preventDefault()
+  e.preventDefault();
 }
 
 /**
  * Handles mouse move while dragging
  */
 function handleMouseMove(e) {
-  if (!isDragging || !overlayPanel) return
+  if (!isDragging || !overlayPanel) return;
 
-  overlayPanel.style.left = (e.clientX - dragOffset.x) + 'px'
-  overlayPanel.style.top = (e.clientY - dragOffset.y) + 'px'
+  overlayPanel.style.left = e.clientX - dragOffset.x + 'px';
+  overlayPanel.style.top = e.clientY - dragOffset.y + 'px';
 }
 
 /**
  * Handles mouse up to stop dragging
  */
 function handleMouseUp() {
-  isDragging = false
+  isDragging = false;
   if (overlayPanel) {
-    overlayPanel.style.cursor = 'grab'
+    overlayPanel.style.cursor = 'grab';
   }
-  document.removeEventListener('mousemove', handleMouseMove)
-  document.removeEventListener('mouseup', handleMouseUp)
+  document.removeEventListener('mousemove', handleMouseMove);
+  document.removeEventListener('mouseup', handleMouseUp);
 }
 
 /**
@@ -130,11 +132,11 @@ function handleMouseUp() {
  */
 function injectPanelStyles() {
   if (document.getElementById('ctp-panel-styles')) {
-    return // Already injected
+    return; // Already injected
   }
 
-  const style = document.createElement('style')
-  style.id = 'ctp-panel-styles'
+  const style = document.createElement('style');
+  style.id = 'ctp-panel-styles';
   style.textContent = `
     #color-thief-police-panel {
       position: fixed;
@@ -264,8 +266,8 @@ function injectPanelStyles() {
       font-size: 11px;
       color: #999;
     }
-  `
-  document.head.appendChild(style)
+  `;
+  document.head.appendChild(style);
 }
 
 /**
@@ -273,7 +275,7 @@ function injectPanelStyles() {
  */
 export function removeFloatingPanel() {
   if (overlayPanel) {
-    overlayPanel.remove()
-    overlayPanel = null
+    overlayPanel.remove();
+    overlayPanel = null;
   }
 }

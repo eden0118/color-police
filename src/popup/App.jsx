@@ -1,84 +1,84 @@
-import React, { useState, useEffect } from 'react'
-import './popup.css'
-import { translations, getLanguage, setLanguage, t } from '../i18n/translations'
-import { getContrastTextColor } from '../utils/colorContrast'
+import React, { useState, useEffect } from 'react';
+import './popup.css';
+import { translations, getLanguage, setLanguage, t } from '../i18n/translations';
+import { getContrastTextColor } from '../utils/colorContrast';
 
 export function Popup() {
-  const [colors, setColors] = useState([])
-  const [clusters, setClusters] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [threshold, setThreshold] = useState(30)
-  const [activeTab, setActiveTab] = useState('clusters')
-  const [highlightedColor, setHighlightedColor] = useState(null)
-  const [language, setLanguageState] = useState('en')
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [colors, setColors] = useState([]);
+  const [clusters, setClusters] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [threshold, setThreshold] = useState(30);
+  const [activeTab, setActiveTab] = useState('clusters');
+  const [highlightedColor, setHighlightedColor] = useState(null);
+  const [language, setLanguageState] = useState('en');
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     // Load language and theme preferences
     const loadPreferences = async () => {
-      const lang = await getLanguage()
-      setLanguageState(lang)
+      const lang = await getLanguage();
+      setLanguageState(lang);
 
       // Load dark mode preference
       if (typeof chrome !== 'undefined' && chrome.storage) {
         chrome.storage.local.get('darkMode', (data) => {
-          const darkMode = data.darkMode !== false
-          setIsDarkMode(darkMode)
-          applyTheme(darkMode)
-        })
+          const darkMode = data.darkMode !== false;
+          setIsDarkMode(darkMode);
+          applyTheme(darkMode);
+        });
       }
-    }
-    loadPreferences()
-  }, [])
+    };
+    loadPreferences();
+  }, []);
 
   const applyTheme = (dark) => {
-    const container = document.querySelector('.popup-container')
+    const container = document.querySelector('.popup-container');
     if (container) {
       if (dark) {
-        container.classList.add('dark-mode')
+        container.classList.add('dark-mode');
       } else {
-        container.classList.remove('dark-mode')
+        container.classList.remove('dark-mode');
       }
     }
-  }
+  };
 
   const handleLanguageChange = (lang) => {
-    setLanguageState(lang)
-    setLanguage(lang)
-  }
+    setLanguageState(lang);
+    setLanguage(lang);
+  };
 
   const handleThemToggle = () => {
-    const newDarkMode = !isDarkMode
-    setIsDarkMode(newDarkMode)
-    applyTheme(newDarkMode)
+    const newDarkMode = !isDarkMode;
+    setIsDarkMode(newDarkMode);
+    applyTheme(newDarkMode);
     if (typeof chrome !== 'undefined' && chrome.storage) {
-      chrome.storage.local.set({ darkMode: newDarkMode })
+      chrome.storage.local.set({ darkMode: newDarkMode });
     }
-  }
+  };
 
   const scanPage = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       // Clear all highlights first before scanning
-      await chrome.tabs.sendMessage(tab.id, { action: 'clearHighlights' })
+      await chrome.tabs.sendMessage(tab.id, { action: 'clearHighlights' });
 
       const response = await chrome.tabs.sendMessage(tab.id, {
         action: 'scanColors',
-      })
+      });
 
       if (response && response.colors) {
-        setColors(response.colors)
-        clusterColors(response.colors)
+        setColors(response.colors);
+        clusterColors(response.colors);
         // Clear highlighted color when scanning
-        setHighlightedColor(null)
+        setHighlightedColor(null);
       }
     } catch (error) {
-      console.error('Error scanning page:', error)
+      console.error('Error scanning page:', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const clusterColors = async (colorList) => {
     try {
@@ -86,38 +86,38 @@ export function Popup() {
         action: 'clusterColors',
         colors: colorList,
         threshold,
-      })
+      });
 
       if (response && response.clusters) {
-        setClusters(response.clusters)
+        setClusters(response.clusters);
       }
     } catch (error) {
-      console.error('Error clustering colors:', error)
+      console.error('Error clustering colors:', error);
     }
-  }
+  };
 
   const highlightColor = async (color) => {
     try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       await chrome.tabs.sendMessage(tab.id, {
         action: 'highlightColor',
         color,
-      })
+      });
 
       // Toggle: if clicking the same color, it will deselect
-      setHighlightedColor(highlightedColor === color ? null : color)
+      setHighlightedColor(highlightedColor === color ? null : color);
     } catch (error) {
-      console.error('Error highlighting color:', error)
+      console.error('Error highlighting color:', error);
     }
-  }
+  };
 
   const handleThresholdChange = (e) => {
-    const newThreshold = parseInt(e.target.value)
-    setThreshold(newThreshold)
+    const newThreshold = parseInt(e.target.value);
+    setThreshold(newThreshold);
     if (colors.length > 0) {
-      clusterColors(colors)
+      clusterColors(colors);
     }
-  }
+  };
 
   return (
     <div className="popup-container" style={{ colorScheme: isDarkMode ? 'dark' : 'light' }}>
@@ -128,10 +128,18 @@ export function Popup() {
             <p className="subtitle">{t('subtitle', language)}</p>
           </div>
           <div className="header-controls">
-            <button className="theme-btn" onClick={handleThemToggle} title={isDarkMode ? t('lightMode', language) : t('darkMode', language)}>
+            <button
+              className="theme-btn"
+              onClick={handleThemToggle}
+              title={isDarkMode ? t('lightMode', language) : t('darkMode', language)}
+            >
               {isDarkMode ? '☀️' : '🌙'}
             </button>
-            <select className="language-select" value={language} onChange={(e) => handleLanguageChange(e.target.value)}>
+            <select
+              className="language-select"
+              value={language}
+              onChange={(e) => handleLanguageChange(e.target.value)}
+            >
               <option value="en">English</option>
               <option value="zh">中文</option>
             </select>
@@ -183,10 +191,15 @@ export function Popup() {
               clusters.map((cluster, idx) => (
                 <div key={idx} className="cluster-item">
                   <div className="cluster-header">
-                    <div className="color-preview" style={{ backgroundColor: cluster.representative }}></div>
+                    <div
+                      className="color-preview"
+                      style={{ backgroundColor: cluster.representative }}
+                    ></div>
                     <div className="cluster-info">
                       <span className="cluster-title">{cluster.representative}</span>
-                      <span className="cluster-count">{cluster.colors.length} {t('colors', language)}</span>
+                      <span className="cluster-count">
+                        {cluster.colors.length} {t('colors', language)}
+                      </span>
                     </div>
                   </div>
                   <div className="cluster-colors">
@@ -198,7 +211,12 @@ export function Popup() {
                         onClick={() => highlightColor(color)}
                         style={{ backgroundColor: color }}
                       >
-                        <span className="color-label" style={{ color: getContrastTextColor(color) }}>{color}</span>
+                        <span
+                          className="color-label"
+                          style={{ color: getContrastTextColor(color) }}
+                        >
+                          {color}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -220,7 +238,12 @@ export function Popup() {
                     title={`${language === 'zh' ? '點擊highlight: ' : 'Click to highlight: '}${color}`}
                   >
                     <div className="color-square" style={{ backgroundColor: color }}></div>
-                    <span className="color-code" style={{ color: getContrastTextColor(color), backgroundColor: color }}>{color}</span>
+                    <span
+                      className="color-code"
+                      style={{ color: getContrastTextColor(color), backgroundColor: color }}
+                    >
+                      {color}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -229,5 +252,5 @@ export function Popup() {
         )}
       </div>
     </div>
-  )
+  );
 }

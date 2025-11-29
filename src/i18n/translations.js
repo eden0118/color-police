@@ -9,7 +9,8 @@ export const translations = {
     allColors: 'All Colors',
     noColors: 'No colors found. Click "Scan Colors" to start.',
     colors: 'colors',
-    deltaEInfo: 'Color similarity is measured using Delta-E (CIEDE2000) algorithm. Lower values mean more similar colors.',
+    deltaEInfo:
+      'Color similarity is measured using Delta-E (CIEDE2000) algorithm. Lower values mean more similar colors.',
     darkMode: 'Dark Mode',
     lightMode: 'Light Mode',
     frequency: 'Frequency',
@@ -28,28 +29,28 @@ export const translations = {
     darkMode: '深色模式',
     lightMode: '淺色模式',
     frequency: '使用頻率',
-  }
-}
+  },
+};
 
 export function getLanguage() {
   // Try to get from chrome storage first
   if (typeof chrome !== 'undefined' && chrome.storage) {
     return new Promise((resolve) => {
       chrome.storage.local.get('language', (data) => {
-        resolve(data.language || navigator.language.startsWith('zh') ? 'zh' : 'en')
-      })
-    })
+        resolve(data.language || navigator.language.startsWith('zh') ? 'zh' : 'en');
+      });
+    });
   }
   // Fallback to navigator language
-  return Promise.resolve(navigator.language.startsWith('zh') ? 'zh' : 'en')
+  return Promise.resolve(navigator.language.startsWith('zh') ? 'zh' : 'en');
 }
 
 export function setLanguage(lang) {
   if (typeof chrome !== 'undefined' && chrome.storage) {
-    chrome.storage.local.set({ language: lang })
+    chrome.storage.local.set({ language: lang });
   }
 }
 
 export function t(key, lang) {
-  return translations[lang]?.[key] || translations.en[key] || key
+  return translations[lang]?.[key] || translations.en[key] || key;
 }
