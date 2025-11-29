@@ -1,0 +1,14 @@
+<svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" rx="12" fill="#667eea"/>
+  <g transform="translate(64, 64)">
+    <!-- Color palette circles -->
+    <circle cx="-35" cy="-20" r="16" fill="#FF6B6B" opacity="0.8"/>
+    <circle cx="0" cy="-35" r="16" fill="#4ECDC4" opacity="0.8"/>
+    <circle cx="35" cy="-20" r="16" fill="#FFE66D" opacity="0.8"/>
+    <circle cx="20" cy="25" r="16" fill="#95E1D3" opacity="0.8"/>
+    <circle cx="-25" cy="25" r="16" fill="#F38181" opacity="0.8"/>
+    <!-- Center magnifying glass -->
+    <circle cx="0" cy="0" r="18" fill="none" stroke="white" stroke-width="3"/>
+    <line x1="12" y1="12" x2="24" y2="24" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>
