@@ -128,13 +128,6 @@ export function Popup() {
             <p className="subtitle">{t('subtitle', language)}</p>
           </div>
           <div className="header-controls">
-            <button
-              className="theme-btn"
-              onClick={handleThemToggle}
-              title={isDarkMode ? t('lightMode', language) : t('darkMode', language)}
-            >
-              {isDarkMode ? '☀️' : '🌙'}
-            </button>
             <select
               className="language-select"
               value={language}
@@ -143,6 +136,13 @@ export function Popup() {
               <option value="en">English</option>
               <option value="zh">中文</option>
             </select>
+            <button
+              className="theme-btn"
+              onClick={handleThemToggle}
+              title={isDarkMode ? t('lightMode', language) : t('darkMode', language)}
+            >
+              {isDarkMode ? '☀️' : '🌙'}
+            </button>
           </div>
         </div>
       </header>
