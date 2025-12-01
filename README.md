@@ -167,7 +167,7 @@ Configuration Files:
 **Debug the Popup**:
 ```
 1. Right-click extension popup
-2. Select "Inspect" 
+2. Select "Inspect"
 3. DevTools opens for popup (console, network, etc.)
 ```
 
@@ -381,9 +381,9 @@ chrome.tabs.sendMessage(tabId, { action: 'scanColors' })
 **highlightColor** (Popup → Content Script)
 ```javascript
 // Request
-chrome.tabs.sendMessage(tabId, { 
-  action: 'highlightColor', 
-  color: '#FF0000' 
+chrome.tabs.sendMessage(tabId, {
+  action: 'highlightColor',
+  color: '#FF0000'
 })
 
 // Response
@@ -427,22 +427,22 @@ chrome.runtime.sendMessage({
 
 ## FAQ
 
-**Q: Why CIEDE2000 algorithm?**  
+**Q: Why CIEDE2000 algorithm?**
 A: It's the industry standard (used by Pantone, Adobe) and perceptually accurate. Much better than simpler distance metrics.
 
-**Q: Can I export the color palette?**  
+**Q: Can I export the color palette?**
 A: Not in v1.0. Planned for Phase 2 (JSON, CSS variables, Tailwind config).
 
-**Q: Does it work on all websites?**  
+**Q: Does it work on all websites?**
 A: Most sites work. Some sites with strict CSP (Content Security Policy) may block the content script.
 
-**Q: How is my data handled?**  
+**Q: How is my data handled?**
 A: All analysis happens locally in your browser. No colors are sent anywhere. Zero data collection.
 
-**Q: Can I customize the colors/theme?**  
+**Q: Can I customize the colors/theme?**
 A: Dark mode is built-in. Full customization planned for Phase 2.
 
-**Q: How do I request a feature?**  
+**Q: How do I request a feature?**
 A: Open an issue on [GitHub](https://github.com/eden0118/color-police/issues) with `[Feature Request]` in the title.
 
 ---
@@ -519,8 +519,8 @@ Built with passion by Eden using:
 - Colord
 - CIEDE2000 color science
 
-**Version**: 1.0.0  
-**Last Updated**: December 1, 2025  
+**Version**: 1.0.0
+**Last Updated**: December 1, 2025
 **Repository**: [color-police](https://github.com/eden0118/color-police)
 
 ---
